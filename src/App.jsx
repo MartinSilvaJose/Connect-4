@@ -1,35 +1,92 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const PLAYER = {
+  RED: 'redCoin',
+  YELLOW: 'yellowCoin'
+}
 
+export function App() {
+  const [board, setBoard] = useState(Array(7).fill(Array(7).fill(null)));
+
+  const [player, setPlayer] = useState(PLAYER.RED);
+  
+
+  const updateBoard = (index) => {
+    const [y, x] = index;
+    //If there is something it does nothing
+    if(board[y][x]) return 
+    //Copia profunda
+    const newBoard = Array.from(JSON.parse(JSON.stringify(board)));
+    //We look for the index of the square we want to mark and mark it
+    newBoard[y][x] = player;
+    setBoard(newBoard);
+    //Change player
+    const newPlayer = player === PLAYER.RED ? PLAYER.YELLOW : PLAYER.RED;
+    setPlayer(newPlayer);
+
+  }
+  const resetGame = () => console.log('jaja saludos')
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Connect 4</h1>
+      <button onClick={resetGame}>Reset game</button>
+      <section>
+        <main className='game'>
+          {
+            //Find the first level of the array
+            board.map((row, i) => {
+              return (
+                //Find the second level of the array
+                board[i].map((cell, j) => {
+                  //We return the square for each cell of the column index located in each row.
+                  return (
+                    <Square
+                      key={i + j}
+                      index={[i,j]}
+                      updateBoard={updateBoard}
+                    >
+                      {cell}
+                    </Square>
+                  )
+                })
+              )
+              
+            })
+          }
+        </main>
+    </section>
+
+
     </>
   )
 }
 
-export default App
+const ROWS = {
+  0: '7',
+  1: '6',
+  2: '5',
+  3: '4',
+  4: '3',
+  5: '2',
+  6: '1',
+
+}
+
+// eslint-disable-next-line react/prop-types
+export function Square({children, index, updateBoard}) {
+  const handleClick = () =>{
+    updateBoard(index)
+  }
+  const [row,column] = index;
+  return (
+    <div
+      className={`square ${children ?? ''}`}
+      onClick={handleClick}
+      style={{gridRow: ROWS[row], gridColumn: column + 1}}
+    >
+      {row +' '+ column}
+    </div>
+  )
+
+}
