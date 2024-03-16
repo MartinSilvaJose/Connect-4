@@ -86,6 +86,8 @@ export function App() {
   return (
     <>
       <h1>Connect 4</h1>
+      <h3>Le toca al jugador</h3>
+      <div className={`player ${player}`}></div>
       <button onClick={resetGame}>Reset game</button>
       <section>
         <main className='game'>
@@ -121,7 +123,7 @@ export function App() {
 
                   <header className='win'>
                     {winner && (
-                      <div className={`coin ${player !== PLAYER.RED ? PLAYER.RED : PLAYER.YELLOW}`}></div>
+                      <div className={`${player !== PLAYER.RED ? PLAYER.RED : PLAYER.YELLOW}`}></div>
                     )}
                   </header>
 
@@ -151,11 +153,10 @@ export function Square({ children, index, updateBoard }) {
   
   return (
     <div
-      className={`square ${children ?? ''}`}
+      className={`square ${children ?? ''} ${row === 6 ? 'last' : ''}`}
       onClick={handleClick}
       style={{ gridRow: ROWS[row], gridColumn: column + 1 }}
     >
-      {row + ', ' + column}
     </div>
   )
 
