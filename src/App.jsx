@@ -15,7 +15,7 @@ export function App() {
     const [row, column] = index;
     for (const [nextRow, nextColumn] of POSITIONS) {
       let contador = 1; // Incluye la ficha que acaba de ser colocada
-  
+
       // Verificar en una dirección
       for (let i = 1; i < 4; i++) {
         const newRow = row + (nextRow * i);
@@ -23,7 +23,7 @@ export function App() {
         if (newRow < 0 || newRow >= 7 || newColumn < 0 || newColumn >= 7 || board[newRow][newColumn] !== player) break;
         contador++;
       }
-  
+
       // Verificar en la dirección opuesta
       for (let i = 1; i < 4; i++) {
         const newRow = row - nextRow * i;
@@ -31,10 +31,10 @@ export function App() {
         if (newRow < 0 || newRow >= 7 || newColumn < 0 || newColumn >= 7 || board[newRow][newColumn] !== player) break;
         contador++;
       }
-  
+
       if (contador >= 4) return true;
     }
-  
+
     return null;
   }
   // const checkEndGame = (newBoard) => {
@@ -43,15 +43,16 @@ export function App() {
   // }
 
   const gravitity = (index, board) => {
+    // eslint-disable-next-line no-unused-vars
     const [y, x] = index;
     let place = 0;
     do {
       if (board[place][x] !== null) {
         place++
-      }else{
+      } else {
         return [place, x];
       }
-    }while(place < 7);
+    } while (place < 7);
   }
 
   const updateBoard = (index) => {
@@ -150,7 +151,7 @@ export function Square({ children, index, updateBoard }) {
   const handleClick = () => {
     updateBoard(index);
   }
-  
+
   return (
     <div
       className={`square ${children ?? ''} ${row === 6 ? 'last' : ''}`}
